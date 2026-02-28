@@ -1,9 +1,63 @@
 "use strict";
 
-const { Plugin, Notice } = require("obsidian");
+const { Plugin, Notice, PluginSettingTab, Setting } = require("obsidian");
+
+const DEFAULT_SETTINGS = {
+  principal: 10000000,
+  monthlyContribution: 500000,
+  annualReturn: 8,
+  annualVolatility: 12,
+  years: 10,
+  simulations: 300,
+};
+
+class InvSimSettingTab extends PluginSettingTab {
+  constructor(app, plugin) {
+    super(app, plugin);
+    this.plugin = plugin;
+  }
+
+  display() {
+    const { containerEl } = this;
+    containerEl.empty();
+    containerEl.createEl("h2", { text: "Investment Simulator 설정" });
+
+    const keys = [
+      ["principal", "기본 초기자산"],
+      ["monthlyContribution", "기본 월 적립금"],
+      ["annualReturn", "기대 연수익률(%)"],
+      ["annualVolatility", "연변동성(%)"],
+      ["years", "기본 기간(년)"],
+      ["simulations", "시뮬레이션 횟수"],
+    ];
+
+    for (const [key, label] of keys) {
+      new Setting(containerEl)
+        .setName(label)
+        .addText((t) =>
+          t.setValue(String(this.plugin.settings[key])).onChange(async (v) => {
+            const n = Number(String(v).replace(/,/g, ""));
+            if (!Number.isFinite(n)) return;
+            this.plugin.settings[key] = n;
+            await this.plugin.saveSettings();
+          })
+        );
+    }
+  }
+}
 
 module.exports = class InvestmentSimulatorPlugin extends Plugin {
   async onload() {
+    await this.loadSettings();
+
+    this.addRibbonIcon("calculator", "INV: 시뮬레이션 템플릿 삽입", () => {
+      const editor = this.app.workspace.activeEditor?.editor;
+      if (!editor) return new Notice("활성 에디터가 없습니다.");
+      editor.replaceSelection(this.template());
+    });
+
+    this.addSettingTab(new InvSimSettingTab(this.app, this));
+
     this.addCommand({
       id: "invsim-insert-template",
       name: "INV: 파라미터 템플릿 삽입",
@@ -24,28 +78,28 @@ module.exports = class InvestmentSimulatorPlugin extends Plugin {
     });
   }
 
+  async loadSettings() {
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+  }
+
+  async saveSettings() {
+    await this.saveData(this.settings);
+  }
+
   template() {
+    const s = this.settings;
     return `## Investment Params
-principal: 10000000
-monthlyContribution: 500000
-annualReturn: 8
-annualVolatility: 12
-years: 10
-simulations: 200
+principal: ${s.principal}
+monthlyContribution: ${s.monthlyContribution}
+annualReturn: ${s.annualReturn}
+annualVolatility: ${s.annualVolatility}
+years: ${s.years}
+simulations: ${s.simulations}
 `;
   }
 
   parse(text) {
-    const defaults = {
-      principal: 10000000,
-      monthlyContribution: 500000,
-      annualReturn: 8,
-      annualVolatility: 12,
-      years: 10,
-      simulations: 200,
-    };
-
-    const out = { ...defaults };
+    const out = { ...this.settings };
     for (const line of text.split("\n")) {
       const m = line.match(/^\s*([a-zA-Z][a-zA-Z0-9_]*)\s*:\s*([^#\n]+)\s*$/);
       if (!m) continue;
