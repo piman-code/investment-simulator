@@ -1,0 +1,10 @@
+{
+  "id": "investment-simulator",
+  "name": "Investment Simulator",
+  "version": "0.1.0",
+  "minAppVersion": "1.0.0",
+  "description": "Obsidian plugin for Monte Carlo investment simulation from note parameters.",
+  "author": "jarvis",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}
