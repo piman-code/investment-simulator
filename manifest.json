@@ -1,9 +1,9 @@
 {
   "id": "investment-simulator",
   "name": "Investment Simulator",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "minAppVersion": "1.0.0",
-  "description": "Obsidian plugin for Monte Carlo investment simulation from note parameters.",
+  "description": "Obsidian market intelligence plugin with simulation, recommendations, OCR ingestion, and league-aware scoring.",
   "author": "jarvis",
   "authorUrl": "",
   "isDesktopOnly": false
