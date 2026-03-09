@@ -1,9 +1,10 @@
-# Investment Simulator 샘플 노트 (복붙용)
+# 3분 첫 분석 샘플 노트
 
-아래를 Obsidian 노트에 그대로 붙여넣고 실행하세요.
+아래 내용을 새 Obsidian 노트에 그대로 붙여넣으세요.
 
-1. `Ctrl+P` -> `INV: Ingest OCR JSON into portfolio` (OCR JSON 사용 시)
-2. `Ctrl+P` -> `INV: Run market intelligence analysis`
+1. `Ctrl+P` 또는 `Cmd+P`
+2. `INV: Analyze current note` 실행
+3. 결과가 생기면 `## Latest Report`의 `Read This First`부터 읽기
 
 ---
 
@@ -19,35 +20,20 @@ maxCryptoWeight: 40
 maxSingleAssetWeight: 35
 
 ## Market Quotes
-- AAPL,190,USD,nasdaq,manual
-- QQQ,430,USD,nasdaq,manual
-- BTC,90000,USD,binance,manual
+Optional. Leave empty for the first run if you already typed marketPrice in `Portfolio`.
 
 ## Portfolio
-- AAPL,stock,12,,25
-- QQQ,etf,8,,25
-- BTC,crypto,0.18,,20
+- AAPL,stock,12,190,25,150
+- QQQ,etf,8,430,25,400
+- BTC,crypto,0.18,90000,20
 - KRW,cash,5000000,1,30
 
-## Results
-- Alpha: 3.12%
-- Beta: -0.42%
-- Gamma: 1.07%
-
-## OCR JSON (optional)
-```json
-{
-  "source": {"platform": "sample", "capturedAt": "2026-02-28T12:00:00Z", "timezone": "UTC"},
-  "positions": [
-    {"symbolRaw": "AAPL", "symbol": "AAPL", "assetType": "stock", "quantity": 3, "marketPrice": 190, "confidence": 0.93},
-    {"symbolRaw": "BTC", "symbol": "BTC", "assetType": "crypto", "quantity": 0.05, "marketPrice": 90000, "confidence": 0.72}
-  ],
-  "quality": {"overallConfidence": 0.82, "missingFields": [], "requiresManualReview": true}
-}
-```
+## Notes
+- 첫 실행에서는 OCR, 리그, 시나리오 입력이 없어도 됩니다.
+- 보고서가 `UNKNOWN` 또는 `STALE`이면 실제 실행 전 가격을 다시 확인하세요.
 
 ---
 
 참고:
+- 더 쉬운 단계별 설명은 `docs/BEGINNER_QUICK_START_KR.md`
 - 이 플러그인은 투자 조언이 아닙니다.
-- 최종 투자 판단과 책임은 사용자에게 있습니다.

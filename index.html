@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>주식·코인 투자 시뮬레이터</title>
+  <title>투자 점검 도우미</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 20px; background:#0f172a; color:#e2e8f0; }
-    .wrap { max-width: 1100px; margin: 0 auto; }
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 20px; background:#0f172a; color:#e2e8f0; }
+    .wrap { max-width: 1100px; width: 100%; margin: 0 auto; }
     h1 { margin-bottom: 8px; }
     .muted { color:#94a3b8; font-size:14px; }
     .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:16px 0; }
-    .card { background:#111827; border:1px solid #334155; border-radius:12px; padding:12px; }
+    .card { background:#111827; border:1px solid #334155; border-radius:12px; padding:12px; min-width:0; }
     label { display:block; font-size:13px; color:#cbd5e1; margin-bottom:4px; }
     input, select, button { width:100%; box-sizing:border-box; padding:10px; border-radius:8px; border:1px solid #334155; background:#0b1220; color:#e2e8f0; }
     button { cursor:pointer; border:none; background:#2563eb; font-weight:700; }
@@ -20,7 +21,7 @@
     .good { color:#22c55e; }
     .warn { color:#f59e0b; }
     .bad { color:#ef4444; }
-    canvas { width:100%; height:320px; background:#0b1220; border:1px solid #334155; border-radius:12px; }
+    canvas { display:block; width:100%; max-width:100%; height:320px; background:#0b1220; border:1px solid #334155; border-radius:12px; }
     .results { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:16px; }
     .small { font-size:12px; color:#93c5fd; }
     .tips { display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:10px; margin:12px 0; }
@@ -29,10 +30,13 @@
     .badge { display:inline-block; margin-left:6px; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:700; }
     .badge.warn { background:#7c2d12; color:#fdba74; }
     .badge.ok { background:#14532d; color:#86efac; }
-    @media (max-width: 480px) {
-      body { margin: 10px; }
+    @media (max-width: 768px) {
+      body { padding: 12px; }
       .wrap { max-width: 100%; }
-      .grid, .results, .btns { grid-template-columns: 1fr; }
+      .grid, .results, .btns, .tips { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      body { padding: 10px; }
       .card { padding: 10px; }
       .kpi { font-size: 20px; }
       canvas { height: 240px; }
@@ -42,13 +46,13 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>주식·코인 투자 시뮬레이터</h1>
-  <p class="muted">월 적립 + 변동성(몬테카를로) 기반. 실제 투자 판단 전 참고용으로 쓰세요.</p>
+  <h1>투자 점검 도우미</h1>
+  <p class="muted">처음에는 숫자 몇 개와 자산 비중만 넣어도 됩니다. 결과는 "지금 상태", "위험", "다음 행동" 순서로 읽으세요.</p>
 
   <div class="tips">
-    <div class="tip"><b>1) 금액 입력</b><br/>초기자산, 월 적립금, 투자기간을 먼저 넣어줘.</div>
-    <div class="tip"><b>2) 비중 맞추기</b><br/>주식+코인+현금 비중 합계는 100%여야 해.</div>
-    <div class="tip"><b>3) 결과 해석</b><br/>목표확률↑, MDD↓, 샤프지수↑ 조합이 좋아.</div>
+    <div class="tip"><b>1) 먼저 입력할 것</b><br/>초기자산, 월 적립금, 기간만 넣어도 첫 점검을 시작할 수 있어요.</div>
+    <div class="tip"><b>2) 포트폴리오 확인</b><br/>주식+코인+현금 비중 합계는 100%여야 해요.</div>
+    <div class="tip"><b>3) 결과 읽는 순서</b><br/>현재 상태 → 위험 경고 → 추천안 → 다음 행동 순서로 보세요.</div>
   </div>
 
   <div class="card">
