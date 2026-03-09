@@ -1,9 +1,9 @@
 {
   "id": "investment-simulator",
   "name": "Investment Simulator",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "minAppVersion": "1.0.0",
-  "description": "Obsidian market intelligence plugin with simulation, recommendations, OCR ingestion, and league-aware scoring.",
+  "description": "Beginner-first Obsidian portfolio check and planning plugin with guided setup, analysis, and advanced OCR extensions.",
   "author": "jarvis",
   "authorUrl": "",
   "isDesktopOnly": false
